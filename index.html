@@ -5,18 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shift Task Viewer</title>
     <style>
-        /* Simple styling for the popup/modal */
-        #popup {
-            display: block; /* Show popup by default */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border: 2px solid #000;
-            z-index: 10;
-        }
+        /* Styling for overlay */
         .overlay {
             position: fixed;
             top: 0;
@@ -26,9 +15,52 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 5;
         }
+
+        /* Simple styling for the popup/modal */
+        #popup {
+            display: block; /* Show popup by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            width: 300px;
+        }
+        
+        /* Styling for dropdowns and labels */
+        select, label {
+            font-size: 1em;
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        /* Button container */
         .button-container {
             margin-top: 20px;
+            text-align: center;
         }
+
+        /* Styling for Go Back Button */
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
         /* Styling for stacked iframes */
         .iframe-container {
             margin-top: 20px;
@@ -140,8 +172,8 @@
                 RAC: {
                     monday: {
                         Opening: [
-                            'https://docs.google.com/document/d/your-RAC-monday-opening-task-doc-id',
-                            'https://docs.google.com/document/d/your-RAC-monday-mid-morning-task-doc-id',  // Next shift
+                            'https://docs.google.com/document/d/e/2PACX-1vQP41KDWVajyA59K3Aob_poBxySSVufY8Xr58Wg6bDIEtdUMMjCu2Oz5H3osSgPWitB8L1Z5zcwNJOj/pub',
+                            'https://docs.google.com/document/d/e/2PACX-1vTedtalN69b09FNDbzgF56Bqar9lbSBxZE0JoDIypDIyg9NgmsCy7ul9IHw6Yt-137CERF7A3OX6u5J/pub',  // Next shift
                             'https://docs.google.com/document/d/your-RAC-monday-closing-task-doc-id'     // Previous shift
                         ],
                         "Mid-Morning": [
@@ -158,78 +190,6 @@
                             'https://docs.google.com/document/d/your-RAC-monday-closing-task-doc-id',
                             'https://docs.google.com/document/d/your-RAC-monday-opening-task-doc-id',    // Next shift
                             'https://docs.google.com/document/d/your-RAC-monday-afternoon-task-doc-id'   // Previous shift
-                        ]
-                    },
-                    saturday: {
-                        Opening: [
-                            'https://docs.google.com/document/d/your-RAC-saturday-opening-task-doc-id',
-                            'https://docs.google.com/document/d/your-RAC-saturday-closing-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-RAC-saturday-opening-task-doc-id'     // Previous shift (same shift on weekend)
-                        ],
-                        Closing: [
-                            'https://docs.google.com/document/d/your-RAC-saturday-closing-task-doc-id',
-                            'https://docs.google.com/document/d/your-RAC-saturday-opening-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-RAC-saturday-closing-task-doc-id'   // Previous shift (same shift on weekend)
-                        ]
-                    },
-                    sunday: {
-                        Opening: [
-                            'https://docs.google.com/document/d/your-RAC-sunday-opening-task-doc-id',
-                            'https://docs.google.com/document/d/your-RAC-sunday-closing-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-RAC-sunday-opening-task-doc-id'     // Previous shift (same shift on weekend)
-                        ],
-                        Closing: [
-                            'https://docs.google.com/document/d/your-RAC-sunday-closing-task-doc-id',
-                            'https://docs.google.com/document/d/your-RAC-sunday-opening-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-RAC-sunday-closing-task-doc-id'   // Previous shift (same shift on weekend)
-                        ]
-                    }
-                },
-                MAC: {
-                    monday: {
-                        Opening: [
-                            'https://docs.google.com/document/d/your-MAC-monday-opening-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-monday-mid-morning-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-MAC-monday-closing-task-doc-id'     // Previous shift
-                        ],
-                        "Mid-Morning": [
-                            'https://docs.google.com/document/d/your-MAC-monday-mid-morning-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-monday-afternoon-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-MAC-monday-opening-task-doc-id'     // Previous shift
-                        ],
-                        Afternoon: [
-                            'https://docs.google.com/document/d/your-MAC-monday-afternoon-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-monday-closing-task-doc-id',    // Next shift
-                            'https://docs.google.com/document/d/your-MAC-monday-mid-morning-task-doc-id'     // Previous shift
-                        ],
-                        Closing: [
-                            'https://docs.google.com/document/d/your-MAC-monday-closing-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-monday-opening-task-doc-id',    // Next shift
-                            'https://docs.google.com/document/d/your-MAC-monday-afternoon-task-doc-id'   // Previous shift
-                        ]
-                    },
-                    saturday: {
-                        Opening: [
-                            'https://docs.google.com/document/d/your-MAC-saturday-opening-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-saturday-closing-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-MAC-saturday-opening-task-doc-id'     // Previous shift (same shift on weekend)
-                        ],
-                        Closing: [
-                            'https://docs.google.com/document/d/your-MAC-saturday-closing-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-saturday-opening-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-MAC-saturday-closing-task-doc-id'   // Previous shift (same shift on weekend)
-                        ]
-                    },
-                    sunday: {
-                        Opening: [
-                            'https://docs.google.com/document/d/your-MAC-sunday-opening-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-sunday-closing-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-MAC-sunday-opening-task-doc-id'     // Previous shift (same shift on weekend)
-                        ],
-                        Closing: [
-                            'https://docs.google.com/document/d/your-MAC-sunday-closing-task-doc-id',
-                            'https://docs.google.com/document/d/your-MAC-sunday-opening-task-doc-id',  // Next shift
-                            'https://docs.google.com/document/d/your-MAC-sunday-closing-task-doc-id'   // Previous shift (same shift on weekend)
                         ]
                     }
                 }
