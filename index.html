@@ -75,52 +75,58 @@
     </style>
 </head>
 <body>
-    <!-- Overlay background -->
-    <div class="overlay" id="overlay"></div>
+    <!-- Selection view -->
+    <div id="selectionView">
+        <!-- Overlay background -->
+        <div class="overlay" id="overlay"></div>
 
-    <!-- Popup content -->
-    <div id="popup">
-        <h2>Select Your Shift</h2>
-        <label for="location">Location:</label>
-        <select id="location">
-            <option value="RAC">RAC</option>
-            <option value="MAC">MAC</option>
-        </select>
-        
-        <br><br>
+        <!-- Popup content -->
+        <div id="popup">
+            <h2>Select Your Shift</h2>
+            <label for="location">Location:</label>
+            <select id="location">
+                <option value="RAC">RAC</option>
+                <option value="MAC">MAC</option>
+            </select>
+            
+            <br><br>
 
-        <label for="day">Day:</label>
-        <select id="day">
-            <option value="monday">Monday</option>
-            <option value="tuesday">Tuesday</option>
-            <option value="wednesday">Wednesday</option>
-            <option value="thursday">Thursday</option>
-            <option value="friday">Friday</option>
-            <option value="saturday">Saturday</option>
-            <option value="sunday">Sunday</option>
-        </select>
+            <label for="day">Day:</label>
+            <select id="day">
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+            </select>
 
-        <br><br>
+            <br><br>
 
-        <label for="shift">Shift:</label>
-        <select id="shift">
-            <option value="Opening">Opening</option>
-            <option value="Mid-Morning">Mid-Morning</option>
-            <option value="Afternoon">Afternoon</option>
-            <option value="Closing">Closing</option>
-        </select>
+            <label for="shift">Shift:</label>
+            <select id="shift">
+                <option value="Opening">Opening</option>
+                <option value="Mid-Morning">Mid-Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Closing">Closing</option>
+            </select>
 
-        <br><br>
+            <br><br>
 
-        <button onclick="loadTaskDocs()">View Tasks</button>
+            <button onclick="loadTaskDocs()">View Tasks</button>
+        </div>
     </div>
 
-    <!-- Embed the Google Doc iframe container -->
-    <div id="taskDocContainer" class="iframe-container"></div>
+    <!-- Document view -->
+    <div id="documentView" style="display: none;">
+        <!-- Embed the Google Doc iframe container -->
+        <div id="taskDocContainer" class="iframe-container"></div>
 
-    <!-- Go Back Button (hidden initially) -->
-    <div id="goBackButton" class="button-container" style="display: none;">
-        <button onclick="showPopup()">Go Back to Selection</button>
+        <!-- Go Back Button -->
+        <div id="goBackButton" class="button-container">
+            <button onclick="showSelection()">Go Back to Selection</button>
+        </div>
     </div>
 
     <script>
@@ -129,10 +135,6 @@
             var location = document.getElementById('location').value;
             var day = document.getElementById('day').value;
             var shift = document.getElementById('shift').value;
-            
-            // Close the popup
-            document.getElementById('popup').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
 
             // Map the location, day, and shift to the correct Google Docs URLs
             var taskDocs = getTaskDocsURLs(location, day, shift);
@@ -147,23 +149,21 @@
                 document.getElementById('taskDocContainer').appendChild(iframe);
             });
 
-            // Show the "Go Back" button
-            document.getElementById('goBackButton').style.display = 'block';
+            // Hide the selection view and show the document view
+            document.getElementById('selectionView').style.display = 'none';
+            document.getElementById('documentView').style.display = 'block';
         }
 
-        // Function to show the popup again
-        function showPopup() {
+        // Function to show the selection view again
+        function showSelection() {
             // Reset selections to default
             document.getElementById('location').value = 'RAC';
             document.getElementById('day').value = 'monday';
             document.getElementById('shift').value = 'Opening';
 
-            // Show the popup and hide the task document container
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-
-            // Hide the "Go Back" button
-            document.getElementById('goBackButton').style.display = 'none';
+            // Show the selection view and hide the document view
+            document.getElementById('selectionView').style.display = 'block';
+            document.getElementById('documentView').style.display = 'none';
         }
 
         // Function to get URLs for the task docs based on location, day, and shift
@@ -174,7 +174,7 @@
                         Opening: [
                             'https://docs.google.com/document/d/e/2PACX-1vQP41KDWVajyA59K3Aob_poBxySSVufY8Xr58Wg6bDIEtdUMMjCu2Oz5H3osSgPWitB8L1Z5zcwNJOj/pub',
                             'https://docs.google.com/document/d/e/2PACX-1vTedtalN69b09FNDbzgF56Bqar9lbSBxZE0JoDIypDIyg9NgmsCy7ul9IHw6Yt-137CERF7A3OX6u5J/pub',  // Next shift
-                            'https://docs.google.com/document/d/your-RAC-monday-closing-task-doc-id'     // Previous shift
+                            'https://drive.google.com/file/d/1yPaUVjX1AyOadHgg4s4Q_KLYfen9y12Y/view?usp=sharing'     // Previous shift
                         ],
                         "Mid-Morning": [
                             'https://docs.google.com/document/d/your-RAC-monday-mid-morning-task-doc-id',
